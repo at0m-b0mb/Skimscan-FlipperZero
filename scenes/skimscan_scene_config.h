@@ -1,0 +1,8 @@
+ADD_SCENE(skimscan, start, Start)
+ADD_SCENE(skimscan, sweep, Sweep)
+ADD_SCENE(skimscan, list, List)
+ADD_SCENE(skimscan, detail, Detail)
+ADD_SCENE(skimscan, learn, Learn)
+ADD_SCENE(skimscan, wiring, Wiring)
+ADD_SCENE(skimscan, settings, Settings)
+ADD_SCENE(skimscan, about, About)

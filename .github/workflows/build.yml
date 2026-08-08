@@ -1,0 +1,48 @@
+name: Build FAP
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # The engine decides everything the screen shows, and it is the one part a
+  # screenshot cannot vouch for, so it is checked on every push.
+  test:
+    runs-on: ubuntu-latest
+    name: scoring engine
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run host tests
+        run: make -C test
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        channel: [release, dev]
+    name: ufbt (${{ matrix.channel }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ufbt
+        run: python3 -m pip install --upgrade ufbt
+
+      - name: Sync SDK (${{ matrix.channel }})
+        run: ufbt update --channel=${{ matrix.channel }}
+
+      - name: Build Skimscan
+        run: ufbt
+
+      - name: Upload .fap
+        uses: actions/upload-artifact@v4
+        with:
+          name: skimscan-fap-${{ matrix.channel }}
+          path: dist/*.fap
+          if-no-files-found: error

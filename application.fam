@@ -1,0 +1,23 @@
+App(
+    appid="skimscan",
+    name="Skimscan",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="skimscan_app",
+    stack_size=4 * 1024,
+    fap_category="Bluetooth",
+    fap_icon="icons/skimscan_10px.png",
+    fap_icon_assets="icons",
+    fap_author="at0m-b0mb",
+    fap_weburl="https://github.com/at0m-b0mb/Skimscan-FlipperZero",
+    fap_version="1.0",
+    # Explicit, so the recursive default does not sweep test/ (host-only code)
+    # into the firmware build.
+    sources=[
+        "skimscan.c",
+        "helpers/*.c",
+        "views/*.c",
+        "scenes/*.c",
+    ],
+    fap_description="Bluetooth card-skimmer detector for fuel pumps and cash machines. Skimmers are usually built around a two-dollar Bluetooth serial bridge spliced across the card reader, because nobody wants to come back for the card numbers - they collect them over the air from the car park. That radio is the one part of a skimmer visible from outside the panel, and Skimscan looks for it: an ESP32 companion runs BR/EDR inquiry and LE scanning, and the Flipper scores every device it hears on seven signals across three independent families - what it calls itself, what class of device it claims to be, and whether it is still sitting there pass after pass at pump range. One family of evidence never produces a verdict however loud it is, nothing reaches the top band on a single sighting, and nothing ever scores 100; open any device and it shows every signal that fired, what each was worth, and which cap held the score down. It never calls a pump safe, because most skimmers are not radios at all. Includes a six-panel walkthrough of how the attack actually works, an on-device wiring diagram with a live link check, CSV sweep logs, and a demo mode that needs no hardware.",
+    requires=["gui"],
+)
